@@ -1,0 +1,178 @@
+{
+  "1": {
+    "tag": "Hot",
+    "reason": "The buyer is actively reviewing the quotation with their partner and promised a confirmation today.",
+    "followup_offset_days": -1,
+    "draft": "Hi Suresh ji, did you get a chance to discuss with your partner?",
+    "status": "buyer_waiting",
+    "used_fallback": false
+  },
+  "2": {
+    "tag": "Warm",
+    "reason": "The buyer showed interest in a demo but has not yet confirmed a date.",
+    "followup_offset_days": -2,
+    "draft": "Hi Meena ma'am, just following up to see if any day works for you to visit our Peenya unit for the demo.",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "3": {
+    "tag": "Warm",
+    "reason": "The buyer received the brochure and promised to revert, but hasn't responded yet.",
+    "followup_offset_days": -8,
+    "draft": "Hi Arjun, just checking if you had a chance to review the brochure for our strapping machines?",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "4": {
+    "tag": "Hot",
+    "reason": "The buyer is waiting for a reply on price and delivery, and wants to finalise this week.",
+    "followup_offset_days": -2,
+    "draft": "Hi Kavita ji, I am still confirming the price with my manager and will update you shortly.",
+    "status": "buyer_waiting",
+    "used_fallback": false
+  },
+  "5": {
+    "tag": "Warm",
+    "reason": "The buyer postponed the discussion until after Diwali due to budget constraints.",
+    "followup_offset_days": 26,
+    "draft": "Hello Imran sir, Diwali ke baad baat karne ke liye kaha tha, kya abhi vacuum packing machine ke liye discuss kar sakte hain?",
+    "status": "deferred",
+    "used_fallback": false
+  },
+  "6": {
+    "tag": "Warm",
+    "reason": "The buyer asked for warranty details which the rep sent on October 9, and the rep is now waiting for their response.",
+    "followup_offset_days": -5,
+    "draft": "Hi Deepak, did you get a chance to check the warranty and service terms PDF I sent?",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "7": {
+    "tag": "Cold",
+    "reason": "The buyer has not replied for 30 days since the last contact.",
+    "followup_offset_days": 14,
+    "draft": "Hi Sunita ji, hope you are doing well. Please let me know if you have any questions about our packaging machines.",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "8": {
+    "tag": "Hot",
+    "reason": "The buyer asked for urgent delivery by Friday and offered to send the PO.",
+    "followup_offset_days": -3,
+    "draft": "Hi Rohit, I am confirming the Friday delivery with our logistics and will update you shortly.",
+    "status": "buyer_waiting",
+    "used_fallback": false
+  },
+  "9": {
+    "tag": "Warm",
+    "reason": "The buyer postponed the plant visit and promised to let you know when free, and 14 days have passed without a reply.",
+    "followup_offset_days": -10,
+    "draft": "Hi Farah ma'am, hope you are doing well. Please let me know when you are free to reschedule our plant visit.",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "10": {
+    "tag": "Warm",
+    "reason": "The buyer asked an initial product question and the rep is waiting for the buyer's reply regarding daily volume.",
+    "followup_offset_days": 4,
+    "draft": "Hi Gaurav, just following up on my previous message regarding your daily volume so I can share the right options for you.",
+    "status": "rep_waiting",
+    "used_fallback": false
+  },
+  "11": {
+    "tag": "Cold",
+    "reason": "The buyer explicitly stated they finalised with another supplier and it has been 45 days since the last contact.",
+    "followup_offset_days": 30,
+    "draft": "Hi Lakshmi, understood. Thank you for letting us know, and please keep us in mind if you have any packaging machine requirements in the future.",
+    "status": "closed",
+    "used_fallback": false
+  },
+  "12": {
+    "tag": "Hot",
+    "reason": "The buyer asked for a price discount and is waiting for a reply.",
+    "followup_offset_days": -5,
+    "draft": "Hi Manoj, I am checking with the owner regarding your discount request and will update you shortly.",
+    "status": "buyer_waiting",
+    "used_fallback": false
+  },
+  "13": {
+    "tag": "Warm",
+    "reason": "This is a new lead from the website form with no chat history yet.",
+    "followup_offset_days": 0,
+    "draft": "Hi Pooja, this is Vikram. Thanks for your enquiry on our website. How can I help you with our packaging machines?",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "14": {
+    "tag": "Warm",
+    "reason": "This is a new lead from IndiaMART with no prior contact yet.",
+    "followup_offset_days": 0,
+    "draft": "Hi Harish, this is Anjali. I saw your enquiry on IndiaMART for a packaging machine. Which product are you planning to pack?",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "15": {
+    "tag": "Warm",
+    "reason": "This is a new lead from a trade show with no chat history yet.",
+    "followup_offset_days": 0,
+    "draft": "Hi Nisha, this is Karan. It was great meeting you at the trade show, and I wanted to follow up regarding your packaging machine requirements for Gupta Cosmetics.",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "16": {
+    "tag": "Warm",
+    "reason": "This is a new lead from a referral with no chat history yet.",
+    "followup_offset_days": 0,
+    "draft": "Hi Sanjay, this is Rahul. I was given your contact through a referral and would love to understand your packaging requirements for Malhotra Frozen Foods.",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "17": {
+    "tag": "Cold",
+    "reason": "There has been no contact for 25 days since the initial lead was received from Justdial.",
+    "followup_offset_days": 14,
+    "draft": "Hi Divya, this is Neha. I saw your enquiry on Justdial regarding our packaging machines and wanted to check if you need any details?",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "18": {
+    "tag": "Warm",
+    "reason": "This is a new lead from a cold call with no previous chat history.",
+    "followup_offset_days": 0,
+    "draft": "Hi Ravi, this is Vikram. Thanks for speaking with me earlier about packaging machines for Chandra Steel Fabricators, let me know when you have a few minutes to discuss your requirements.",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "19": {
+    "tag": "Warm",
+    "reason": "This is a new lead from the website form with no chat history yet.",
+    "followup_offset_days": 2,
+    "draft": "Hi Alok, this is Anjali. Thanks for your inquiry on our website regarding packaging machines for Pandey Flour Mills, how can I help you today?",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "20": {
+    "tag": "Warm",
+    "reason": "This is a new lead from IndiaMART with no previous chat history.",
+    "followup_offset_days": 0,
+    "draft": "Hi Shweta, this is Karan. I saw your enquiry on IndiaMART for a packaging machine for Bansal Pickles and wanted to connect. Which product are you planning to pack?",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "21": {
+    "tag": "Cold",
+    "reason": "There has been no contact for 35 days since receiving the lead from the trade show.",
+    "followup_offset_days": 14,
+    "draft": "Hi Tarun, this is Rahul. It was great meeting you at the trade show, and I wanted to check in regarding your requirement for a packaging machine.",
+    "status": "new_lead",
+    "used_fallback": false
+  },
+  "22": {
+    "tag": "Warm",
+    "reason": "This is a new inbound lead from WhatsApp with no prior chat history.",
+    "followup_offset_days": 1,
+    "draft": "Hi Zoya, this is Neha. I saw your enquiry about our packaging machines. How can I help you today?",
+    "status": "new_lead",
+    "used_fallback": false
+  }
+}

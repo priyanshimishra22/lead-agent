@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lead Follow-ups</title>
+<style>
+  :root { --bg:#f5f6f8; --card:#fff; --text:#1c1f26; --muted:#6b7280; --line:#e5e7eb; --red:#c62828; --amber:#b26a00; --blue:#37507a; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; background:var(--bg); color:var(--text); }
+  header { background:#fff; border-bottom:1px solid var(--line); padding:14px 20px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:5; }
+  header h1 { font-size:18px; margin:0; flex:1; }
+  select, input, textarea { font:inherit; padding:8px 10px; border:1px solid #cfd4dc; border-radius:8px; background:#fff; }
+  button { font:inherit; padding:8px 14px; border-radius:8px; border:1px solid #cfd4dc; background:#fff; cursor:pointer; }
+  button.primary { background:#1d4ed8; color:#fff; border-color:#1d4ed8; }
+  button:disabled { opacity:.6; cursor:wait; }
+  main { max-width:900px; margin:0 auto; padding:20px; }
+  h2 { font-size:16px; margin:22px 0 10px; display:flex; gap:10px; align-items:baseline; }
+  h2 .count { color:var(--muted); font-weight:400; font-size:14px; }
+  h2 .odue { color:var(--red); font-weight:600; font-size:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-left:6px solid #cbd5e1; border-radius:10px; padding:12px 14px; margin-bottom:10px; cursor:pointer; }
+  .card:hover { box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  .card.overdue { border-left-color:var(--red); background:#fff5f5; }
+  .card.today { border-left-color:#f59e0b; background:#fffbeb; }
+  .card.upcoming { opacity:.85; }
+  .row { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .co, .rep, .reason { color:var(--muted); font-size:14px; }
+  .rep { margin-left:auto; }
+  .due { font-weight:700; margin:6px 0 2px; }
+  .overdue .due { color:var(--red); }
+  .today .due { color:var(--amber); }
+  .upcoming .due { color:var(--muted); font-weight:500; }
+  .tag { font-size:12px; font-weight:700; padding:2px 9px; border-radius:99px; }
+  .tag.Hot { background:#fde2e2; color:var(--red); }
+  .tag.Warm { background:#fff0d1; color:var(--amber); }
+  .tag.Cold { background:#e3ebf7; color:var(--blue); }
+  .empty { color:var(--muted); padding:14px; background:#fff; border:1px dashed var(--line); border-radius:10px; }
+  .overlay { position:fixed; inset:0; background:rgba(15,23,42,.45); display:none; justify-content:center; align-items:flex-start; overflow:auto; padding:24px 12px; z-index:10; }
+  .overlay.show { display:flex; }
+  .panel { background:#fff; border-radius:14px; width:100%; max-width:640px; padding:18px; }
+  .panel h3 { margin:0; font-size:18px; }
+  .chat { background:#f1f3f6; border-radius:10px; padding:10px; margin:10px 0; max-height:260px; overflow:auto; display:flex; flex-direction:column; gap:6px; }
+  .msg { max-width:80%; padding:7px 10px; border-radius:10px; font-size:14px; background:#fff; align-self:flex-start; }
+  .msg.rep { background:#d9f7c7; align-self:flex-end; }
+  .msg small { display:block; color:var(--muted); font-size:11px; }
+  .box { border:1px solid var(--line); border-radius:10px; padding:10px 12px; margin:10px 0; }
+  .lbl { font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:4px; }
+  textarea { width:100%; min-height:90px; resize:vertical; }
+  .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .grid { display:grid; gap:10px; }
+  .toast { position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#111827; color:#fff; padding:10px 16px; border-radius:10px; display:none; z-index:20; max-width:90%; }
+  .toast.err { background:#b91c1c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Lead follow-ups</h1>
+  <label>Viewing as <select id="repSelect"></select></label>
+  <button class="primary" id="addLeadBtn">+ Add lead</button>
+</header>
+<main>
+  <h2>Today's follow-ups <span class="count" id="dueCount"></span><span class="odue" id="overdueCount"></span></h2>
+  <div id="dueList"></div>
+  <h2>Upcoming <span class="count" id="upCount"></span></h2>
+  <div id="upList"></div>
+</main>
+
+<div class="overlay" id="leadOverlay"><div class="panel" id="leadPanel"></div></div>
+
+<div class="overlay" id="addOverlay">
+  <div class="panel">
+    <h3>Add a new lead</h3>
+    <div class="grid" style="margin-top:12px">
+      <input id="nName" placeholder="Name *">
+      <input id="nCompany" placeholder="Company *">
+      <input id="nPhone" placeholder="Phone">
+      <select id="nSource">
+        <option>IndiaMART</option><option>Website form</option><option>Trade show</option><option>Referral</option>
+        <option>Justdial</option><option>Cold call</option><option>WhatsApp inbound</option><option>Other</option>
+      </select>
+      <select id="nRep"></select>
+    </div>
+    <div class="actions">
+      <button class="primary" id="saveLeadBtn">Save and let the agent review</button>
+      <button id="cancelLeadBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let reps = [], leads = [], openId = null;
+
+async function api(path, method = "GET", body) {
+  const opts = { method, headers: {} };
+  if (body !== undefined) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+  const r = await fetch(path, opts);
+  if (!r.ok) {
+    let msg = "Something went wrong. Please try again.";
+    try { const j = await r.json(); if (typeof j.detail === "string") msg = j.detail; else msg = "Please check the form fields."; } catch (e) {}
+    throw new Error(msg);
+  }
+  return r.json();
+}
+
+function toast(text, isErr) {
+  const t = $("#toast");
+  t.textContent = text; t.className = "toast" + (isErr ? " err" : ""); t.style.display = "block";
+  clearTimeout(toast.timer); toast.timer = setTimeout(() => (t.style.display = "none"), 3500);
+}
+
+const fmt = (iso) => iso ? new Date(iso + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short" }) : "-";
+function dueLabel(l) {
+  if (l.bucket === "overdue") return l.days_overdue + (l.days_overdue === 1 ? " day overdue" : " days overdue");
+  if (l.bucket === "today") return "Due today";
+  return "Due " + fmt(l.next_followup);
+}
+
+function card(l) {
+  return `<div class="card ${l.bucket}" data-id="${l.id}">
+    <div class="row"><span class="tag ${esc(l.tag)}">${esc(l.tag || "-")}</span><b>${esc(l.name)}</b>
+      <span class="co">${esc(l.company)}</span><span class="rep">${esc(l.rep)}</span></div>
+    <div class="due">${dueLabel(l)}</div>
+    <div class="reason">${esc(l.reason)}</div></div>`;
+}
+
+function render() {
+  const due = leads.filter((l) => l.bucket !== "upcoming");
+  const up = leads.filter((l) => l.bucket === "upcoming");
+  const od = due.filter((l) => l.bucket === "overdue").length;
+  $("#dueCount").textContent = "(" + due.length + ")";
+  $("#overdueCount").textContent = od ? od + " overdue" : "";
+  $("#upCount").textContent = "(" + up.length + ")";
+  $("#dueList").innerHTML = due.length ? due.map(card).join("") : '<div class="empty">Nothing due today. Nice work!</div>';
+  $("#upList").innerHTML = up.length ? up.map(card).join("") : '<div class="empty">No upcoming follow-ups.</div>';
+  document.querySelectorAll(".card").forEach((c) => (c.onclick = () => openLead(Number(c.dataset.id))));
+}
+
+async function loadLeads() {
+  const rep = $("#repSelect").value;
+  leads = await api("/api/leads" + (rep ? "?rep=" + encodeURIComponent(rep) : ""));
+  render();
+}
+
+async function loadReps() {
+  reps = await api("/api/reps");
+  $("#repSelect").innerHTML = '<option value="">All reps (owner view)</option>' + reps.map((r) => `<option>${esc(r)}</option>`).join("");
+  $("#nRep").innerHTML = reps.map((r) => `<option>${esc(r)}</option>`).join("");
+}
+
+function panelHtml(d) {
+  const l = d.lead;
+  const chat = d.messages.length
+    ? d.messages.map((m) => `<div class="msg ${m.sender}"><small>${esc(m.sender === "rep" ? "Rep" : "Buyer")} · ${fmt(m.date)}</small>${esc(m.text)}</div>`).join("")
+    : '<div class="co">No chat yet.</div>';
+  return `<div class="row"><h3>${esc(l.name)}</h3><span class="tag ${esc(l.tag)}">${esc(l.tag || "-")}</span>
+      <button style="margin-left:auto" id="closeBtn">Close</button></div>
+    <div class="co">${esc(l.company)} · ${esc(l.phone)} · ${esc(l.source)} · Rep: ${esc(l.rep)}</div>
+    <div class="chat" id="chatBox">${chat}</div>
+    <div class="box"><div class="lbl">Why ${esc(l.tag)}</div>${esc(l.reason)}
+      <div class="due ${l.bucket}" style="margin-top:6px">${dueLabel(l)} (${fmt(l.next_followup)})</div></div>
+    <div class="lbl">Draft message (edit before sending)</div>
+    <textarea id="draftBox">${esc(l.draft)}</textarea>
+    <div class="actions"><button id="saveDraftBtn">Save draft</button>
+      <button class="primary" id="sentBtn">Mark as sent</button></div>
+    <div class="box"><div class="lbl">Add a chat message</div>
+      <div class="row"><select id="mSender"><option value="buyer">Buyer said</option><option value="rep">I said</option></select>
+      <input id="mText" placeholder="Type the message" style="flex:1;min-width:160px"><button id="addMsgBtn">Add</button></div></div>`;
+}
+
+function showPanel(d) {
+  openId = d.lead.id;
+  $("#leadPanel").innerHTML = panelHtml(d);
+  $("#leadOverlay").classList.add("show");
+  const cb = $("#chatBox"); cb.scrollTop = cb.scrollHeight;
+  $("#closeBtn").onclick = closePanel;
+  $("#saveDraftBtn").onclick = () => act("#saveDraftBtn", "Saving...", async () => {
+    showPanel(await api(`/api/leads/${openId}/draft`, "PUT", { draft: $("#draftBox").value })); toast("Draft saved");
+  });
+  $("#sentBtn").onclick = () => act("#sentBtn", "Agent is updating...", async () => {
+    const d2 = await api(`/api/leads/${openId}/sent`, "POST", { draft: $("#draftBox").value });
+    showPanel(d2); await loadLeads(); toast("Marked as sent. Next follow-up: " + fmt(d2.lead.next_followup));
+  });
+  $("#addMsgBtn").onclick = () => act("#addMsgBtn", "Updating...", async () => {
+    const d2 = await api(`/api/leads/${openId}/messages`, "POST", { sender: $("#mSender").value, text: $("#mText").value });
+    showPanel(d2); await loadLeads(); toast("Message added. The agent updated this lead.");
+  });
+}
+
+async function act(btnSel, busyText, fn) {
+  const b = $(btnSel), old = b.textContent; b.disabled = true; b.textContent = busyText;
+  try { await fn(); } catch (e) { toast(e.message, true); const b2 = $(btnSel); if (b2) { b2.disabled = false; b2.textContent = old; } }
+}
+
+async function openLead(id) { try { showPanel(await api("/api/leads/" + id)); } catch (e) { toast(e.message, true); } }
+function closePanel() { $("#leadOverlay").classList.remove("show"); openId = null; }
+
+$("#addLeadBtn").onclick = () => { ["#nName", "#nCompany", "#nPhone"].forEach((s) => ($(s).value = "")); $("#addOverlay").classList.add("show"); };
+$("#cancelLeadBtn").onclick = () => $("#addOverlay").classList.remove("show");
+$("#saveLeadBtn").onclick = () => act("#saveLeadBtn", "Agent is reviewing...", async () => {
+  const d = await api("/api/leads", "POST", { name: $("#nName").value, company: $("#nCompany").value, phone: $("#nPhone").value, source: $("#nSource").value, rep: $("#nRep").value });
+  $("#addOverlay").classList.remove("show"); $("#saveLeadBtn").disabled = false; $("#saveLeadBtn").textContent = "Save and let the agent review";
+  await loadLeads(); showPanel(d); toast("Lead added and tagged by the agent");
+});
+$("#repSelect").onchange = loadLeads;
+$("#leadOverlay").onclick = (e) => { if (e.target.id === "leadOverlay") closePanel(); };
+
+(async () => { try { await loadReps(); await loadLeads(); } catch (e) { toast(e.message, true); } })();
+</script>
+</body>
+</html>
